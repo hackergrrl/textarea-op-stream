@@ -3,14 +3,23 @@ var diff = require('adiff').diff
 
 module.exports = function (textarea) {
   textarea.addEventListener('input', onInput)
+  textarea.addEventListener('focus', function () {
+    return onInput(null, true)
+  })
 
   var old = []
   var stream = new Readable({objectMode: true})
 
   stream._read = function () {}
 
-  function onInput (ev) {
+  function onInput (ev, ignore) {
     var val = textarea.value.split('')
+
+    if (ignore) {
+      old = val
+      return true
+    }
+
     var d = diff(old, val)
     if (d[0]) {
       var pos = d[0][0]
