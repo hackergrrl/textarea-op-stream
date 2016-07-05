@@ -4,12 +4,12 @@
 
 ## Background
 
-[`textarea`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea)s
-are complex: they have a slew of properties and events, and describing its state
+[`textarea`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea)
+is complex: they have a slew of properties and events, and describing its state
 is non-trivial. It's not easy to learn about inserts and delete operations:
 interpreting multiple `keydown` events to determine what key and modifiers were
-pressed is onerous. I thought it would be nice to have a readable stream of such
-operations.
+pressed is onerous. I thought it would be nice to have a readable stream of
+these operations.
 
 ## Usage
 
