@@ -47,6 +47,8 @@ as you insert 'Hello!' and then delete pieces of the text.
 var wrap = require('textarea-op-stream')
 ```
 
+### wrap(textarea)
+
 Wraps a `<textarea>` element, returning a Readable object stream of insert and
 delete operations. The two object forms to be expected are
 
