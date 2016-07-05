@@ -1,7 +1,7 @@
 {
   "name": "textarea-op-stream",
   "description": "get a readable stream of all inserts and deletes in a textarea",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Stephen Whitmore <stephen.whitmore@gmail.com>",
   "repository": {
     "url": "git://github.com/noffle/textarea-op-stream.git"
