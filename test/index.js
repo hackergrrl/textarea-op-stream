@@ -60,3 +60,33 @@ test('multiple insertions', function (t) {
     ])
   })
 })
+
+test('deletions come before insertions', function (t) {
+  // ..also, deletion 'pos's should go highest to lowest
+
+  t.plan(1)
+
+  var ta = new EventTarget()
+  var stream = OpStream(ta)
+  var ops = []
+
+  ta.value = 'hello world!'
+  ta.send('input')
+
+  ta.value = 'goodbye world'
+  ta.send('input')
+
+  stream.on('data', function (data) {
+    ops.push(data)
+  })
+
+  process.nextTick(function () {
+    t.deepEqual(ops, [
+      {op: 'insert', pos: 0, str: 'hello world!'},
+      {op: 'delete', pos: 11, count: 1},
+      {op: 'delete', pos: 2, count: 3},
+      {op: 'delete', pos: 0, count: 1},
+      {op: 'insert', pos: 0, str: 'goodby'}
+    ])
+  })
+})

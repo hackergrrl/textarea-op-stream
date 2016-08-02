@@ -24,13 +24,16 @@ module.exports = function (textarea) {
     while (diff.length) {
       var change = diff.shift()
       var pos = change[0]
-      if (!change[1]) {
-        // insert
+
+      // deletion
+      if (change[1] > 0) {
+        stream.push({ op: 'delete', pos: pos, count: change[1] })
+      }
+
+      // insert
+      if (change.length > 2) {
         var str = change.slice(2).join('')
         stream.push({ op: 'insert', pos: pos, str: str })
-      } else {
-        // delete
-        stream.push({ op: 'delete', pos: pos, count: change[1] })
       }
     }
 
