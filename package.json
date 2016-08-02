@@ -15,7 +15,8 @@
     "readable-stream": "^2.1.4"
   },
   "devDependencies": {
-    "tape": "*"
+    "dom-event-target": "^1.0.0",
+    "tape": "^4.6.0"
   },
   "license": "ISC"
 }
