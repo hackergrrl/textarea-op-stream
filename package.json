@@ -11,7 +11,6 @@
     "test": "tape test/*.js"
   },
   "dependencies": {
-    "adiff": "^0.2.13",
     "readable-stream": "^2.1.4"
   },
   "devDependencies": {
