@@ -45,6 +45,9 @@ test('multiple insertions', function (t) {
   ta.value = '123'
   ta.send('input')
 
+  ta.value = '^123'
+  ta.send('input')
+
   ta.value = '^123$'
   ta.send('input')
 
@@ -55,8 +58,8 @@ test('multiple insertions', function (t) {
   process.nextTick(function () {
     t.deepEqual(ops, [
       {op: 'insert', pos: 0, str: '123'},
-      {op: 'insert', pos: 3, str: '$'},
-      {op: 'insert', pos: 0, str: '^'}
+      {op: 'insert', pos: 0, str: '^'},
+      {op: 'insert', pos: 4, str: '$'}
     ])
   })
 })
@@ -70,7 +73,7 @@ test('deletions come before insertions', function (t) {
   var stream = OpStream(ta)
   var ops = []
 
-  ta.value = 'hello world!'
+  ta.value = 'hello world'
   ta.send('input')
 
   ta.value = 'goodbye world'
@@ -82,11 +85,37 @@ test('deletions come before insertions', function (t) {
 
   process.nextTick(function () {
     t.deepEqual(ops, [
-      {op: 'insert', pos: 0, str: 'hello world!'},
-      {op: 'delete', pos: 11, count: 1},
-      {op: 'delete', pos: 2, count: 3},
-      {op: 'delete', pos: 0, count: 1},
-      {op: 'insert', pos: 0, str: 'goodby'}
+      {op: 'insert', pos: 0, str: 'hello world'},
+      {op: 'delete', pos: 0, count: 5},
+      {op: 'insert', pos: 0, str: 'goodbye'}
+    ])
+  })
+})
+
+test('breakage case', function (t) {
+  var s1 = 'In another moment down went Alice after it,'
+  var s2 = ' never once considering how in the world she was to get out again.'
+
+  t.plan(1)
+
+  var ta = new EventTarget()
+  var stream = OpStream(ta)
+  var ops = []
+
+  ta.value = s1
+  ta.send('input')
+
+  ta.value = s1 + s2
+  ta.send('input')
+
+  stream.on('data', function (data) {
+    ops.push(data)
+  })
+
+  process.nextTick(function () {
+    t.deepEqual(ops, [
+      {op: 'insert', pos: 0, str: s1},
+      {op: 'insert', pos: 43, str: s2}
     ])
   })
 })

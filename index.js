@@ -1,5 +1,5 @@
 var Readable = require('readable-stream')
-var Diff = require('adiff').diff
+var Diff = require('./diff')
 
 module.exports = function (textarea) {
   textarea.addEventListener('input', onInput)
@@ -13,7 +13,7 @@ module.exports = function (textarea) {
   stream._read = function () {}
 
   function onInput (ev, ignore) {
-    var val = textarea.value.split('')
+    var val = textarea.value
 
     if (ignore) {
       old = val
@@ -21,20 +21,11 @@ module.exports = function (textarea) {
     }
 
     var diff = Diff(old, val)
-    while (diff.length) {
-      var change = diff.shift()
-      var pos = change[0]
-
-      // deletion
-      if (change[1] > 0) {
-        stream.push({ op: 'delete', pos: pos, count: change[1] })
-      }
-
-      // insert
-      if (change.length > 2) {
-        var str = change.slice(2).join('')
-        stream.push({ op: 'insert', pos: pos, str: str })
-      }
+    if (diff[0]) {
+      stream.push({ op: 'delete', pos: diff[0].at, count: diff[0].count })
+    }
+    if (diff[1]) {
+      stream.push({ op: 'insert', pos: diff[1].at, str: diff[1].text })
     }
 
     old = val
